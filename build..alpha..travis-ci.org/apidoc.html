@@ -1,0 +1,670 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/googlechrome/sw-precache"
+
+    >sw-precache (v5.1.0)</a>
+</h1>
+<h4>Generates a service worker to cache your local App Shell resources.</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.sw-precache">module sw-precache</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.generate">
+            function <span class="apidocSignatureSpan">sw-precache.</span>generate
+            <span class="apidocSignatureSpan">(params, callback)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.write">
+            function <span class="apidocSignatureSpan">sw-precache.</span>write
+            <span class="apidocSignatureSpan">(filePath, params, callback)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">sw-precache.</span>functions</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.sw-precache.functions">module sw-precache.functions</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.functions.addDirectoryIndex">
+            function <span class="apidocSignatureSpan">sw-precache.functions.</span>addDirectoryIndex
+            <span class="apidocSignatureSpan">(originalUrl, index)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.functions.cleanResponse">
+            function <span class="apidocSignatureSpan">sw-precache.functions.</span>cleanResponse
+            <span class="apidocSignatureSpan">(originalResponse)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.functions.createCacheKey">
+            function <span class="apidocSignatureSpan">sw-precache.functions.</span>createCacheKey
+            <span class="apidocSignatureSpan">(originalUrl, paramName, paramValue, dontCacheBustUrlsMatching)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.functions.isPathWhitelisted">
+            function <span class="apidocSignatureSpan">sw-precache.functions.</span>isPathWhitelisted
+            <span class="apidocSignatureSpan">(whitelist, absoluteUrlString)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.functions.stripIgnoredUrlParameters">
+            function <span class="apidocSignatureSpan">sw-precache.functions.</span>stripIgnoredUrlParameters
+            <span class="apidocSignatureSpan">(originalUrl, ignoreUrlParametersMatching)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.sw-precache.generate">module sw-precache.generate</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.generate.generate">
+            function <span class="apidocSignatureSpan">sw-precache.</span>generate
+            <span class="apidocSignatureSpan">(params, callback)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.sw-precache.write">module sw-precache.write</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.write.write">
+            function <span class="apidocSignatureSpan">sw-precache.</span>write
+            <span class="apidocSignatureSpan">(filePath, params, callback)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.sw-precache" id="apidoc.module.sw-precache">module sw-precache</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.sw-precache.generate" id="apidoc.element.sw-precache.generate">
+        function <span class="apidocSignatureSpan">sw-precache.</span>generate
+        <span class="apidocSignatureSpan">(params, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function generate(params, callback) {
+  return new Promise(function(resolve, reject) {
+    params = defaults(params || {}, {
+      cacheId: &#x27;&#x27;,
+      clientsClaim: true,
+      directoryIndex: &#x27;index.html&#x27;,
+      dontCacheBustUrlsMatching: null,
+      dynamicUrlToDependencies: {},
+      handleFetch: true,
+      ignoreUrlParametersMatching: [/^utm_/],
+      importScripts: [],
+      logger: console.log,
+      maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2MB
+      navigateFallback: &#x27;&#x27;,
+      navigateFallbackWhitelist: [],
+      replacePrefix: &#x27;&#x27;,
+      skipWaiting: true,
+      staticFileGlobs: [],
+      stripPrefix: &#x27;&#x27;,
+      stripPrefixMulti: {},
+      templateFilePath: path.join(
+        path.dirname(fs.realpathSync(__filename)), &#x27;..&#x27;, &#x27;service-worker.tmpl&#x27;),
+      verbose: false
+    });
+
+    if (!Array.isArray(params.ignoreUrlParametersMatching)) {
+      params.ignoreUrlParametersMatching = [params.ignoreUrlParametersMatching];
+    }
+
+    var relativeUrlToHash = {};
+    var cumulativeSize = 0;
+    params.stripPrefixMulti[params.stripPrefix] = params.replacePrefix;
+
+    params.staticFileGlobs.forEach(function(globPattern) {
+      var filesAndSizesAndHashes = getFilesAndSizesAndHashesForGlobPattern(
+        globPattern, params.outputFilePath);
+
+      // The files returned from glob are sorted by default, so we don&#x27;t need to sort here.
+      filesAndSizesAndHashes.forEach(function(fileAndSizeAndHash) {
+        if (fileAndSizeAndHash.size &#x3c;= params.maximumFileSizeToCacheInBytes) {
+          // Strip the prefix to turn this into a relative URL.
+          var relativeUrl = fileAndSizeAndHash.file
+            .replace(
+              new RegExp(&#x27;^(&#x27; + Object.keys(params.stripPrefixMulti)
+                  .map(escapeRegExp).join(&#x27;|&#x27;) + &#x27;)&#x27;),
+              function(match) {
+                return params.stripPrefixMulti[match];
+              })
+            .replace(path.sep, &#x27;/&#x27;);
+          relativeUrlToHash[relativeUrl] = fileAndSizeAndHash.hash;
+
+          if (params.verbose) {
+            params.logger(util.format(&#x27;Caching static resource &#x22;%s&#x22; (%s)&#x27;,
+              fileAndSizeAndHash.file,
+              prettyBytes(fileAndSizeAndHash.size)));
+          }
+
+          cumulativeSize += fileAndSizeAndHash.size;
+        } else {
+          params.logger(
+            util.format(&#x27;Skipping static resource &#x22;%s&#x22; (%s) - max size is %s&#x27;,
+            fileAndSizeAndHash.file, prettyBytes(fileAndSizeAndHash.size),
+            prettyBytes(params.maximumFileSizeToCacheInBytes)));
+        }
+      });
+    });
+
+    Object.keys(params.dynamicUrlToDependencies).forEach(function(dynamicUrl) {
+      var dependency = params.dynamicUrlToDependencies[dynamicUrl];
+      var isString = typeof dependency === &#x27;string&#x27;;
+
+      if (!Array.isArray(dependency) &#x26;&#x26; !isString) {
+        throw Error(util.format(
+          &#x27;The value for the dynamicUrlToDependencies.%s &#x27; +
+          &#x27;option must be an Array or a String.&#x27;,
+          dynamicUrl));
+      }
+
+      if (isString) {
+        cumulativeSize += dependency.length;
+        relativeUrlToHash[dynamicUrl] = getHash(dependency);
+      } else {
+        var filesAndSizesAndHashes = dependency
+          .sort()
+          .map(function(file) {
+            try {
+              return getFileAndSizeAndHashForFile(file);
+            } catch (e) {
+              // Provide some additional information about the failure if the file is missing.
+              if (e.code === &#x27;ENOENT&#x27;) {
+                params.logger(util.format(
+                  &#x27;%s was listed as a dependency for dynamic URL %s, but &#x27; +
+                  &#x27;the file does not exist. Either remove the entry as a &#x27; +
+                  &#x27;dependency, or correct the path to the file.&#x27;,
+                  file, dynamicUrl
+                ));
+              }
+              // Re-throw the exception unconditionally, since this should be treated as fatal.
+              throw e;
+            }
+          });
+        var concatenatedHashes = &#x27;&#x27;;
+
+        filesAndSizesAndHashes.forEach(function(fileAndSizeAndHash) {
+          // Let&#x27;s assume that the response size of a server-g ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.sw-precache.write" id="apidoc.element.sw-precache.write">
+        function <span class="apidocSignatureSpan">sw-precache.</span>write
+        <span class="apidocSignatureSpan">(filePath, params, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function write(filePath, params, callback) {
+  return new Promise(function(resolve, reject) {
+    function finish(error, value) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(value);
+      }
+
+      if (callback) {
+        callback(error, value);
+      }
+    }
+
+    mkdirp.sync(path.dirname(filePath));
+
+    // Keep track of where we&#x27;re outputting the file to ensure that we don&#x27;t
+    // pick up a previously written version in our new list of files.
+    // See https://github.com/GoogleChrome/sw-precache/issues/101
+    params.outputFilePath = absolutePath(filePath);
+
+    generate(params).then(function(serviceWorkerFileContents) {
+      fs.writeFile(filePath, serviceWorkerFileContents, finish);
+    }, finish);
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+```js
+gulp.task(&#x27;generate-service-worker&#x27;, function(callback) {
+  var path = require(&#x27;path&#x27;);
+  var swPrecache = require(&#x27;sw-precache&#x27;);
+  var rootDir = &#x27;app&#x27;;
+
+  swPrecache.<span class="apidocCodeKeywordSpan">write</span>(`${rootDir}/service-worker.js`, {
+    staticFileGlobs: [rootDir + &#x27;/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff}&#x27;],
+    stripPrefix: rootDir
+  }, callback);
+});
+```
+
+This task will create `app/service-worker.js`, which your client pages need to
+...</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.sw-precache.functions" id="apidoc.module.sw-precache.functions">module sw-precache.functions</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.sw-precache.functions.addDirectoryIndex" id="apidoc.element.sw-precache.functions.addDirectoryIndex">
+        function <span class="apidocSignatureSpan">sw-precache.functions.</span>addDirectoryIndex
+        <span class="apidocSignatureSpan">(originalUrl, index)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">addDirectoryIndex = function (originalUrl, index) {
+  var url = new URL(originalUrl);
+  if (url.pathname.slice(-1) === &#x27;/&#x27;) {
+    url.pathname += index;
+  }
+  return url.toString();
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.sw-precache.functions.cleanResponse" id="apidoc.element.sw-precache.functions.cleanResponse">
+        function <span class="apidocSignatureSpan">sw-precache.functions.</span>cleanResponse
+        <span class="apidocSignatureSpan">(originalResponse)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">cleanResponse = function (originalResponse) {
+  // If this is not a redirected response, then we don&#x27;t have to do anything.
+  if (!originalResponse.redirected) {
+    return Promise.resolve(originalResponse);
+  }
+
+  // Firefox 50 and below doesn&#x27;t support the Response.body stream, so we may
+  // need to read the entire body to memory as a Blob.
+  var bodyPromise = &#x27;body&#x27; in originalResponse ?
+    Promise.resolve(originalResponse.body) :
+    originalResponse.blob();
+
+  return bodyPromise.then(function(body) {
+    // new Response() is happy when passed either a stream or a Blob.
+    return new Response(body, {
+      headers: originalResponse.headers,
+      status: originalResponse.status,
+      statusText: originalResponse.statusText
+    });
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.sw-precache.functions.createCacheKey" id="apidoc.element.sw-precache.functions.createCacheKey">
+        function <span class="apidocSignatureSpan">sw-precache.functions.</span>createCacheKey
+        <span class="apidocSignatureSpan">(originalUrl, paramName, paramValue, dontCacheBustUrlsMatching)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">createCacheKey = function (originalUrl, paramName, paramValue, dontCacheBustUrlsMatching) {
+  // Create a new URL object to avoid modifying originalUrl.
+  var url = new URL(originalUrl);
+
+  // If dontCacheBustUrlsMatching is not set, or if we don&#x27;t have a match,
+  // then add in the extra cache-busting URL parameter.
+  if (!dontCacheBustUrlsMatching ||
+      !(url.pathname.match(dontCacheBustUrlsMatching))) {
+    url.search += (url.search ? &#x27;&#x26;&#x27; : &#x27;&#x27;) +
+      encodeURIComponent(paramName) + &#x27;=&#x27; + encodeURIComponent(paramValue);
+  }
+
+  return url.toString();
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.sw-precache.functions.isPathWhitelisted" id="apidoc.element.sw-precache.functions.isPathWhitelisted">
+        function <span class="apidocSignatureSpan">sw-precache.functions.</span>isPathWhitelisted
+        <span class="apidocSignatureSpan">(whitelist, absoluteUrlString)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">isPathWhitelisted = function (whitelist, absoluteUrlString) {
+  // If the whitelist is empty, then consider all URLs to be whitelisted.
+  if (whitelist.length === 0) {
+    return true;
+  }
+
+  // Otherwise compare each path regex to the path of the URL passed in.
+  var path = (new URL(absoluteUrlString)).pathname;
+  return whitelist.some(function(whitelistedPathRegex) {
+    return path.match(whitelistedPathRegex);
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.sw-precache.functions.stripIgnoredUrlParameters" id="apidoc.element.sw-precache.functions.stripIgnoredUrlParameters">
+        function <span class="apidocSignatureSpan">sw-precache.functions.</span>stripIgnoredUrlParameters
+        <span class="apidocSignatureSpan">(originalUrl, ignoreUrlParametersMatching)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">stripIgnoredUrlParameters = function (originalUrl, ignoreUrlParametersMatching) {
+  var url = new URL(originalUrl);
+
+  url.search = url.search.slice(1) // Exclude initial &#x27;?&#x27;
+    .split(&#x27;&#x26;&#x27;) // Split into an array of &#x27;key=value&#x27; strings
+    .map(function(kv) {
+      return kv.split(&#x27;=&#x27;); // Split each &#x27;key=value&#x27; string into a [key, value] array
+    })
+    .filter(function(kv) {
+      return ignoreUrlParametersMatching.every(function(ignoredRegex) {
+        return !ignoredRegex.test(kv[0]); // Return true iff the key doesn&#x27;t match any of the regexes.
+      });
+    })
+    .map(function(kv) {
+      return kv.join(&#x27;=&#x27;); // Join each [key, value] array into a &#x27;key=value&#x27; string
+    })
+    .join(&#x27;&#x26;&#x27;); // Join the array of &#x27;key=value&#x27; strings into a string with &#x27;&#x26;&#x27; in between each
+
+  return url.toString();
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.sw-precache.generate" id="apidoc.module.sw-precache.generate">module sw-precache.generate</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.sw-precache.generate.generate" id="apidoc.element.sw-precache.generate.generate">
+        function <span class="apidocSignatureSpan">sw-precache.</span>generate
+        <span class="apidocSignatureSpan">(params, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function generate(params, callback) {
+  return new Promise(function(resolve, reject) {
+    params = defaults(params || {}, {
+      cacheId: &#x27;&#x27;,
+      clientsClaim: true,
+      directoryIndex: &#x27;index.html&#x27;,
+      dontCacheBustUrlsMatching: null,
+      dynamicUrlToDependencies: {},
+      handleFetch: true,
+      ignoreUrlParametersMatching: [/^utm_/],
+      importScripts: [],
+      logger: console.log,
+      maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2MB
+      navigateFallback: &#x27;&#x27;,
+      navigateFallbackWhitelist: [],
+      replacePrefix: &#x27;&#x27;,
+      skipWaiting: true,
+      staticFileGlobs: [],
+      stripPrefix: &#x27;&#x27;,
+      stripPrefixMulti: {},
+      templateFilePath: path.join(
+        path.dirname(fs.realpathSync(__filename)), &#x27;..&#x27;, &#x27;service-worker.tmpl&#x27;),
+      verbose: false
+    });
+
+    if (!Array.isArray(params.ignoreUrlParametersMatching)) {
+      params.ignoreUrlParametersMatching = [params.ignoreUrlParametersMatching];
+    }
+
+    var relativeUrlToHash = {};
+    var cumulativeSize = 0;
+    params.stripPrefixMulti[params.stripPrefix] = params.replacePrefix;
+
+    params.staticFileGlobs.forEach(function(globPattern) {
+      var filesAndSizesAndHashes = getFilesAndSizesAndHashesForGlobPattern(
+        globPattern, params.outputFilePath);
+
+      // The files returned from glob are sorted by default, so we don&#x27;t need to sort here.
+      filesAndSizesAndHashes.forEach(function(fileAndSizeAndHash) {
+        if (fileAndSizeAndHash.size &#x3c;= params.maximumFileSizeToCacheInBytes) {
+          // Strip the prefix to turn this into a relative URL.
+          var relativeUrl = fileAndSizeAndHash.file
+            .replace(
+              new RegExp(&#x27;^(&#x27; + Object.keys(params.stripPrefixMulti)
+                  .map(escapeRegExp).join(&#x27;|&#x27;) + &#x27;)&#x27;),
+              function(match) {
+                return params.stripPrefixMulti[match];
+              })
+            .replace(path.sep, &#x27;/&#x27;);
+          relativeUrlToHash[relativeUrl] = fileAndSizeAndHash.hash;
+
+          if (params.verbose) {
+            params.logger(util.format(&#x27;Caching static resource &#x22;%s&#x22; (%s)&#x27;,
+              fileAndSizeAndHash.file,
+              prettyBytes(fileAndSizeAndHash.size)));
+          }
+
+          cumulativeSize += fileAndSizeAndHash.size;
+        } else {
+          params.logger(
+            util.format(&#x27;Skipping static resource &#x22;%s&#x22; (%s) - max size is %s&#x27;,
+            fileAndSizeAndHash.file, prettyBytes(fileAndSizeAndHash.size),
+            prettyBytes(params.maximumFileSizeToCacheInBytes)));
+        }
+      });
+    });
+
+    Object.keys(params.dynamicUrlToDependencies).forEach(function(dynamicUrl) {
+      var dependency = params.dynamicUrlToDependencies[dynamicUrl];
+      var isString = typeof dependency === &#x27;string&#x27;;
+
+      if (!Array.isArray(dependency) &#x26;&#x26; !isString) {
+        throw Error(util.format(
+          &#x27;The value for the dynamicUrlToDependencies.%s &#x27; +
+          &#x27;option must be an Array or a String.&#x27;,
+          dynamicUrl));
+      }
+
+      if (isString) {
+        cumulativeSize += dependency.length;
+        relativeUrlToHash[dynamicUrl] = getHash(dependency);
+      } else {
+        var filesAndSizesAndHashes = dependency
+          .sort()
+          .map(function(file) {
+            try {
+              return getFileAndSizeAndHashForFile(file);
+            } catch (e) {
+              // Provide some additional information about the failure if the file is missing.
+              if (e.code === &#x27;ENOENT&#x27;) {
+                params.logger(util.format(
+                  &#x27;%s was listed as a dependency for dynamic URL %s, but &#x27; +
+                  &#x27;the file does not exist. Either remove the entry as a &#x27; +
+                  &#x27;dependency, or correct the path to the file.&#x27;,
+                  file, dynamicUrl
+                ));
+              }
+              // Re-throw the exception unconditionally, since this should be treated as fatal.
+              throw e;
+            }
+          });
+        var concatenatedHashes = &#x27;&#x27;;
+
+        filesAndSizesAndHashes.forEach(function(fileAndSizeAndHash) {
+          // Let&#x27;s assume that the response size of a server-g ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.sw-precache.write" id="apidoc.module.sw-precache.write">module sw-precache.write</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.sw-precache.write.write" id="apidoc.element.sw-precache.write.write">
+        function <span class="apidocSignatureSpan">sw-precache.</span>write
+        <span class="apidocSignatureSpan">(filePath, params, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function write(filePath, params, callback) {
+  return new Promise(function(resolve, reject) {
+    function finish(error, value) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(value);
+      }
+
+      if (callback) {
+        callback(error, value);
+      }
+    }
+
+    mkdirp.sync(path.dirname(filePath));
+
+    // Keep track of where we&#x27;re outputting the file to ensure that we don&#x27;t
+    // pick up a previously written version in our new list of files.
+    // See https://github.com/GoogleChrome/sw-precache/issues/101
+    params.outputFilePath = absolutePath(filePath);
+
+    generate(params).then(function(serviceWorkerFileContents) {
+      fs.writeFile(filePath, serviceWorkerFileContents, finish);
+    }, finish);
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+```js
+gulp.task(&#x27;generate-service-worker&#x27;, function(callback) {
+  var path = require(&#x27;path&#x27;);
+  var swPrecache = require(&#x27;sw-precache&#x27;);
+  var rootDir = &#x27;app&#x27;;
+
+  swPrecache.<span class="apidocCodeKeywordSpan">write</span>(`${rootDir}/service-worker.js`, {
+    staticFileGlobs: [rootDir + &#x27;/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff}&#x27;],
+    stripPrefix: rootDir
+  }, callback);
+});
+```
+
+This task will create `app/service-worker.js`, which your client pages need to
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
