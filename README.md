@@ -1,6 +1,6 @@
 # npmdoc-sw-precache
 
-#### api documentation for  [sw-precache (v5.1.0)](https://github.com/googlechrome/sw-precache)  [![npm package](https://img.shields.io/npm/v/npmdoc-sw-precache.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-sw-precache) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-sw-precache.svg)](https://travis-ci.org/npmdoc/node-npmdoc-sw-precache)
+#### basic api documentation for  [sw-precache (v5.1.0)](https://github.com/googlechrome/sw-precache)  [![npm package](https://img.shields.io/npm/v/npmdoc-sw-precache.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-sw-precache) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-sw-precache.svg)](https://travis-ci.org/npmdoc/node-npmdoc-sw-precache)
 
 #### Generates a service worker to cache your local App Shell resources.
 
