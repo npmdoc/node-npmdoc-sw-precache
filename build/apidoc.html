@@ -136,32 +136,6 @@
 
     </ol></li>
 
-    <li class="apidocModuleLi"><a href="#apidoc.module.sw-precache.generate">module sw-precache.generate</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.generate.generate">
-            function <span class="apidocSignatureSpan">sw-precache.</span>generate
-            <span class="apidocSignatureSpan">(params, callback)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.sw-precache.write">module sw-precache.write</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.sw-precache.write.write">
-            function <span class="apidocSignatureSpan">sw-precache.</span>write
-            <span class="apidocSignatureSpan">(filePath, params, callback)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
 </ol></div>
 
 <div class="apidocSectionDiv">
@@ -319,21 +293,21 @@
   });
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
+// If the --config option is used, then read the options from an external
+// JSON configuration file. Options from the --config file can be overwritten
+// by any command line options.
+var configFileFlags = cli.flags.config ?
+require(path.resolve(cli.flags.config)) : {};
+var options = setDefaults(cli, configFileFlags);
 
-```js
-gulp.task(&#x27;generate-service-worker&#x27;, function(callback) {
-  var path = require(&#x27;path&#x27;);
-  var swPrecache = require(&#x27;sw-precache&#x27;);
-  var rootDir = &#x27;app&#x27;;
+swPrecache.<span class="apidocCodeKeywordSpan">write</span>(options.swFilePath, options, function(error) {
+if (error) {
+  console.error(error.stack);
+  process.exit(1);
+}
 
-  swPrecache.<span class="apidocCodeKeywordSpan">write</span>(`${rootDir}/service-worker.js`, {
-    staticFileGlobs: [rootDir + &#x27;/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff}&#x27;],
-    stripPrefix: rootDir
-  }, callback);
-});
-```
-
-This task will create `app/service-worker.js`, which your client pages need to
+console.log(options.swFilePath,
+  &#x27;has been generated with the service worker contents.&#x27;);
 ...</pre></li>
     </ul>
 
@@ -476,187 +450,6 @@ This task will create `app/service-worker.js`, which your client pages need to
   return url.toString();
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.sw-precache.generate" id="apidoc.module.sw-precache.generate">module sw-precache.generate</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.sw-precache.generate.generate" id="apidoc.element.sw-precache.generate.generate">
-        function <span class="apidocSignatureSpan">sw-precache.</span>generate
-        <span class="apidocSignatureSpan">(params, callback)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">function generate(params, callback) {
-  return new Promise(function(resolve, reject) {
-    params = defaults(params || {}, {
-      cacheId: &#x27;&#x27;,
-      clientsClaim: true,
-      directoryIndex: &#x27;index.html&#x27;,
-      dontCacheBustUrlsMatching: null,
-      dynamicUrlToDependencies: {},
-      handleFetch: true,
-      ignoreUrlParametersMatching: [/^utm_/],
-      importScripts: [],
-      logger: console.log,
-      maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2MB
-      navigateFallback: &#x27;&#x27;,
-      navigateFallbackWhitelist: [],
-      replacePrefix: &#x27;&#x27;,
-      skipWaiting: true,
-      staticFileGlobs: [],
-      stripPrefix: &#x27;&#x27;,
-      stripPrefixMulti: {},
-      templateFilePath: path.join(
-        path.dirname(fs.realpathSync(__filename)), &#x27;..&#x27;, &#x27;service-worker.tmpl&#x27;),
-      verbose: false
-    });
-
-    if (!Array.isArray(params.ignoreUrlParametersMatching)) {
-      params.ignoreUrlParametersMatching = [params.ignoreUrlParametersMatching];
-    }
-
-    var relativeUrlToHash = {};
-    var cumulativeSize = 0;
-    params.stripPrefixMulti[params.stripPrefix] = params.replacePrefix;
-
-    params.staticFileGlobs.forEach(function(globPattern) {
-      var filesAndSizesAndHashes = getFilesAndSizesAndHashesForGlobPattern(
-        globPattern, params.outputFilePath);
-
-      // The files returned from glob are sorted by default, so we don&#x27;t need to sort here.
-      filesAndSizesAndHashes.forEach(function(fileAndSizeAndHash) {
-        if (fileAndSizeAndHash.size &#x3c;= params.maximumFileSizeToCacheInBytes) {
-          // Strip the prefix to turn this into a relative URL.
-          var relativeUrl = fileAndSizeAndHash.file
-            .replace(
-              new RegExp(&#x27;^(&#x27; + Object.keys(params.stripPrefixMulti)
-                  .map(escapeRegExp).join(&#x27;|&#x27;) + &#x27;)&#x27;),
-              function(match) {
-                return params.stripPrefixMulti[match];
-              })
-            .replace(path.sep, &#x27;/&#x27;);
-          relativeUrlToHash[relativeUrl] = fileAndSizeAndHash.hash;
-
-          if (params.verbose) {
-            params.logger(util.format(&#x27;Caching static resource &#x22;%s&#x22; (%s)&#x27;,
-              fileAndSizeAndHash.file,
-              prettyBytes(fileAndSizeAndHash.size)));
-          }
-
-          cumulativeSize += fileAndSizeAndHash.size;
-        } else {
-          params.logger(
-            util.format(&#x27;Skipping static resource &#x22;%s&#x22; (%s) - max size is %s&#x27;,
-            fileAndSizeAndHash.file, prettyBytes(fileAndSizeAndHash.size),
-            prettyBytes(params.maximumFileSizeToCacheInBytes)));
-        }
-      });
-    });
-
-    Object.keys(params.dynamicUrlToDependencies).forEach(function(dynamicUrl) {
-      var dependency = params.dynamicUrlToDependencies[dynamicUrl];
-      var isString = typeof dependency === &#x27;string&#x27;;
-
-      if (!Array.isArray(dependency) &#x26;&#x26; !isString) {
-        throw Error(util.format(
-          &#x27;The value for the dynamicUrlToDependencies.%s &#x27; +
-          &#x27;option must be an Array or a String.&#x27;,
-          dynamicUrl));
-      }
-
-      if (isString) {
-        cumulativeSize += dependency.length;
-        relativeUrlToHash[dynamicUrl] = getHash(dependency);
-      } else {
-        var filesAndSizesAndHashes = dependency
-          .sort()
-          .map(function(file) {
-            try {
-              return getFileAndSizeAndHashForFile(file);
-            } catch (e) {
-              // Provide some additional information about the failure if the file is missing.
-              if (e.code === &#x27;ENOENT&#x27;) {
-                params.logger(util.format(
-                  &#x27;%s was listed as a dependency for dynamic URL %s, but &#x27; +
-                  &#x27;the file does not exist. Either remove the entry as a &#x27; +
-                  &#x27;dependency, or correct the path to the file.&#x27;,
-                  file, dynamicUrl
-                ));
-              }
-              // Re-throw the exception unconditionally, since this should be treated as fatal.
-              throw e;
-            }
-          });
-        var concatenatedHashes = &#x27;&#x27;;
-
-        filesAndSizesAndHashes.forEach(function(fileAndSizeAndHash) {
-          // Let&#x27;s assume that the response size of a server-g ...</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.sw-precache.write" id="apidoc.module.sw-precache.write">module sw-precache.write</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.sw-precache.write.write" id="apidoc.element.sw-precache.write.write">
-        function <span class="apidocSignatureSpan">sw-precache.</span>write
-        <span class="apidocSignatureSpan">(filePath, params, callback)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">function write(filePath, params, callback) {
-  return new Promise(function(resolve, reject) {
-    function finish(error, value) {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(value);
-      }
-
-      if (callback) {
-        callback(error, value);
-      }
-    }
-
-    mkdirp.sync(path.dirname(filePath));
-
-    // Keep track of where we&#x27;re outputting the file to ensure that we don&#x27;t
-    // pick up a previously written version in our new list of files.
-    // See https://github.com/GoogleChrome/sw-precache/issues/101
-    params.outputFilePath = absolutePath(filePath);
-
-    generate(params).then(function(serviceWorkerFileContents) {
-      fs.writeFile(filePath, serviceWorkerFileContents, finish);
-    }, finish);
-  });
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-
-```js
-gulp.task(&#x27;generate-service-worker&#x27;, function(callback) {
-  var path = require(&#x27;path&#x27;);
-  var swPrecache = require(&#x27;sw-precache&#x27;);
-  var rootDir = &#x27;app&#x27;;
-
-  swPrecache.<span class="apidocCodeKeywordSpan">write</span>(`${rootDir}/service-worker.js`, {
-    staticFileGlobs: [rootDir + &#x27;/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff}&#x27;],
-    stripPrefix: rootDir
-  }, callback);
-});
-```
-
-This task will create `app/service-worker.js`, which your client pages need to
-...</pre></li>
     </ul>
 
 
